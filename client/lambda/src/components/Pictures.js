@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import Progress from '@material-ui/core/CircularProgress';
 
 import Contexts from '../contexts'
 const {PicturesContext} = Contexts;
@@ -45,19 +46,19 @@ export default function (props) {
     const pictures = picSelector.pictures;
     pictures || picSelector.loadPictures();
     return pictures ? <GridList cellHeight={160} className={classes.gridList} cols={4}>
-          {pictures.map(({image_id, image_url}) => {
+          {React.Children.toArray(pictures.map(({image_id, image_url}) => {
             let id = image_id,
               url = image_url;
-            <GridListTile key={id} cols={1}>
+            return <GridListTile cols={1}>
               <img src={url} alt={id}
                 className={picSelector.selected.indexOf(id) > -1 ? 'selected' : ''}
                 onClick={(e) => {
                   picSelector.selectPictures(picSelector.selected.indexOf(id) == -1 ?
-                    [...picSelector.selected, id] : picSelector.selected.filter(p => p.id != id))
+                    [...picSelector.selected, id] : picSelector.selected.filter(p => p != id))
                 }} />
             </GridListTile>
-          })}
-        </GridList> : <h3 style={{textAlign: 'center', marginTop: 50}}>No pictures to show</h3>
+          }))}
+        </GridList> : <h3 style={{textAlign: 'center', marginTop: 50}}><Progress /></h3>
   }
   return (
     <div className={classes.root}>

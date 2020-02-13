@@ -168,7 +168,11 @@ export default function Dashboard() {
           </IconButton>*/}
         </div>
         <Divider />
-        <List><MenuList title='Mood Board' /></List>
+        <List>
+        <MoodContext.Consumer >
+          {({moodBoards}) => <MenuList title='Mood Board' list={Object.keys(moodBoards).map((k, i) => ({name: 'Mood Board ' + (i+1), id: k }))} />}
+        </MoodContext.Consumer>
+        </List>
         <Divider />
         <MoodContext.Consumer>
           {({createMood}) => <Button variant="contained" color="primary" onClick={createMood}>
@@ -181,18 +185,23 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} justify='flex-end'>
           <Grid item xs={12}>
-          <PicturesContext.Consumer>
-          {({findGenre, selected}) => <Button style={{marginBottom: 8}}
-            disabled={!selected.length} variant="contained" color="primary" onClick={findGenre}>
-            done
-          </Button>}
-          </PicturesContext.Consumer>
+          <MoodContext.Consumer>
+              {({current}) => current && 
+            <PicturesContext.Consumer>
+            {({findGenre, selected}) => <Button style={{marginBottom: 8}}
+              disabled={!selected.length} variant="contained" color="primary" onClick={findGenre}>
+              done
+            </Button>}
+            </PicturesContext.Consumer>}
+          </MoodContext.Consumer>
           </Grid>
         </Grid>
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12}>
-              <Pictures />
+            <MoodContext.Consumer>
+              {({current}) => current && <Pictures />}
+            </MoodContext.Consumer>
             </Grid>
           </Grid>
           <Box pt={4}>

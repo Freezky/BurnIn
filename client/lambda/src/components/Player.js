@@ -23,6 +23,7 @@ export default function (props) {
 		function onRangeClick (e) {
 			// compute abs(e.target.x - e.x)
 		}
+		console.log(lPlayer.playlist)
 		let playPos = Number(player.playPos)
 		const progressStyleHtml = `
 		.range:before {
@@ -38,20 +39,20 @@ export default function (props) {
 		      	<style dangerouslySetInnerHTML={{__html: progressStyleHtml}} />
 		    	<div className="range" onClick={onRangeClick}></div>
 
-		        <div className="info__song">{lPlayer.track ? lPlayer.track.name : '--'}</div>
+		        <div className="info__song">{lPlayer.playlist ? lPlayer.playlist[lPlayer.track] && lPlayer.playlist[lPlayer.track].name : '--'}</div>
 
-		        <div className="info__album">{lPlayer.track ? lPlayer.track.album : '--'}</div>
+		        <div className="info__album">{lPlayer.playlist ? lPlayer.playlist[lPlayer.track] && lPlayer.playlist[lPlayer.track].album.name : '--'}</div>
 		        <span dangerouslySetInnerHTML = {{__html: ' &middot; '}} ></span>
-		        <div className="info__artist">{lPlayer.track ? lPlayer.track.artist : '--'}</div>
+		        <div className="info__artist">{lPlayer.playlist ? lPlayer.playlist[lPlayer.track] && lPlayer.playlist[lPlayer.track].artists[0] && lPlayer.playlist[lPlayer.track].artists[0].name : '--'}</div>
 		      </div>
 
 		      <div className="body__buttons">
 		        <ul className="list list--buttons">
-		          <li><IconButton><FaStepBackward /></IconButton></li>
+		          <li><IconButton onClick={() => lPlayer.setTrack((lPlayer.track + 1) % lPlayer.playlist.length)}><FaStepBackward /></IconButton></li>
 
-		          <li><IconButton onClick={player.togglePlay}>{player.playState ? <FaPause /> : <FaPlay />}</IconButton></li>
+		          <li><IconButton onClick={lPlayer.togglePlay}>{lPlayer.playState ? <FaPause /> : <FaPlay />}</IconButton></li>
 
-		          <li><IconButton><FaStepForward /></IconButton></li>
+		          <li><IconButton onClick={() => lPlayer.setTrack((lPlayer.track + 1) % lPlayer.playlist.length)}><FaStepForward /></IconButton></li>
 		        </ul>
 		      </div>
 		    </div>
